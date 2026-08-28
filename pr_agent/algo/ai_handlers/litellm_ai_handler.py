@@ -936,7 +936,8 @@ class LiteLLMAIHandler(BaseAiHandler):
                                 )
                             else:
                                 get_logger().info(
-                                    f"Using openrouter.reasoning_max_tokens over config.reasoning_effort='{openrouter_reasoning_effort}'."
+                                    "Using openrouter.reasoning_max_tokens over"
+                                    f" config.reasoning_effort='{openrouter_reasoning_effort}'."
                                 )
                         elif reasoning_max_tokens <= 0:
                             effective_reasoning_effort = openrouter_reasoning_effort or ""
