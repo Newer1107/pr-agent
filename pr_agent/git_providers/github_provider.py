@@ -784,6 +784,24 @@ class GithubProvider(GitProvider):
                 except:
                     get_logger().error(f"Failed to publish invalid comment as a single line comment: {comment}")
 
+        # log any comments that were dropped entirely
+        fix_enabled = (
+            invalid_comments
+            and get_settings().github.try_fix_invalid_inline_comments
+        )
+        fixed_count = len(fixed_comments_as_one_liner) if fix_enabled else 0
+        dropped_count = len(invalid_comments) - fixed_count
+        if dropped_count > 0:
+            dropped_paths = [
+                comment.get("path", "unknown")
+                for comment, _ in invalid_comments[fixed_count:]
+            ]
+            get_logger().warning(
+                "Dropped %d invalid inline comment(s) that could not be fixed: %s",
+                dropped_count,
+                dropped_paths,
+            )
+
     def _verify_code_comment(self, comment: dict):
         is_verified = False
         e = None
